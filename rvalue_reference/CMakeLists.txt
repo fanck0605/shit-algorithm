@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.14)
+
+add_executable(RValueReferenceTest test/rvalue_reference_test.cpp)
+target_link_libraries(RValueReferenceTest Stack)
+add_test(RValueReferenceTest RValueReferenceTest)
