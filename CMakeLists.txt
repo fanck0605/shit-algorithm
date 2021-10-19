@@ -8,5 +8,6 @@ include(CTest)
 enable_testing()
 
 add_subdirectory(brackets_match)
+add_subdirectory(stack)
 
 add_executable(Main main.cpp)
