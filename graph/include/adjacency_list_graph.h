@@ -61,6 +61,8 @@ public:
 
         const size_t startVertexIndex = 0;
 
+        visit(adjacencyList[startVertexIndex].data);
+        visited[startVertexIndex] = 1;
         toVisit.push(startVertexIndex);
 
         while (!toVisit.empty())
@@ -70,9 +72,6 @@ public:
 
             const VertexNode& current = adjacencyList[currentIndex];
 
-            visit(current.data);
-            visited[currentIndex] = 1;
-
             const ArcNode* arc = current.firstArc;
             while (arc)
             {
@@ -80,6 +79,8 @@ public:
 
                 if (!visited[adjacencyVertexIndex])
                 {
+                    visit(adjacencyList[adjacencyVertexIndex].data);
+                    visited[adjacencyVertexIndex] = 1;
                     toVisit.push(adjacencyVertexIndex);
                 }
 
