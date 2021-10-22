@@ -42,5 +42,10 @@ int main()
                              { std::cout << data << ' '; });
     std::cout << std::endl;
 
+    std::cout << "depth first search: \n";
+    graph.depthFirstSerach([](const std::string &data)
+                           { std::cout << data << ' '; });
+    std::cout << std::endl;
+
     return 0;
 }

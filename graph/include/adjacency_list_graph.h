@@ -10,14 +10,14 @@ public:
     struct ArcNode
     {
         size_t adjacencyVertexIndex;
-        ArcNode *nextArc;
+        ArcNode* nextArc;
 
-        ArcNode(const size_t adjacencyVertexIndex, ArcNode *const nextArc = nullptr)
+        ArcNode(const size_t adjacencyVertexIndex, ArcNode* const nextArc = nullptr)
             : adjacencyVertexIndex(adjacencyVertexIndex), nextArc(nextArc) {}
 
-        friend std::ostream &operator<<(std::ostream &os, ArcNode const *const arc)
+        friend std::ostream& operator<<(std::ostream& os, ArcNode const* const arc)
         {
-            const ArcNode *current = arc;
+            const ArcNode* current = arc;
 
             os << '[';
             if (current)
@@ -39,9 +39,9 @@ public:
     struct VertexNode
     {
         DataType data{};
-        ArcNode *firstArc = nullptr;
+        ArcNode* firstArc = nullptr;
 
-        friend std::ostream &operator<<(std::ostream &os, const VertexNode &node)
+        friend std::ostream& operator<<(std::ostream& os, const VertexNode& node)
         {
             os << node.data << ": " << node.firstArc;
             return os;
@@ -50,12 +50,13 @@ public:
 
     // BFS
     template <typename Visitor>
-    void breadthFirstSearch(const Visitor &visit)
+    void breadthFirstSearch(const Visitor& visit)
     {
         if (adjacencyList.empty())
             return;
 
-        std::vector<bool> visited(adjacencyList.size(), false);
+        // std::vector<bool> !!!
+        std::vector<int8_t> visited(adjacencyList.size(), 0);
         std::queue<size_t> toVisit;
 
         const size_t startVertexIndex = 0;
@@ -67,12 +68,12 @@ public:
             const auto currentIndex = toVisit.front();
             toVisit.pop();
 
-            const VertexNode &current = adjacencyList[currentIndex];
+            const VertexNode& current = adjacencyList[currentIndex];
 
             visit(current.data);
-            visited[currentIndex] = true;
+            visited[currentIndex] = 1;
 
-            const ArcNode *arc = current.firstArc;
+            const ArcNode* arc = current.firstArc;
             while (arc)
             {
                 const size_t adjacencyVertexIndex = arc->adjacencyVertexIndex;
@@ -89,12 +90,20 @@ public:
 
     // DFS
     template <typename Visitor>
-    void depthFirstSerach(Visitor &&visit)
+    void depthFirstSerach(const Visitor& visit)
     {
+        if (adjacencyList.empty())
+        {
+            return;
+        }
+
+        std::vector<int8_t> visited(adjacencyList.size(), 0);
+        const auto startVertexIndex = 0;
+        depthFirstSearchHelper(startVertexIndex, visit, visited);
     }
 
     template <typename VertexGenerator, typename ArcGenerator>
-    void createGraph(VertexGenerator &&generateVertex, ArcGenerator &&generateArc)
+    void createGraph(VertexGenerator&& generateVertex, ArcGenerator&& generateArc)
     {
         std::cout << "vertex:\n";
         for (;;)
@@ -106,7 +115,7 @@ public:
                 break;
 
             vertexNum++;
-            adjacencyList.push_back(VertexNode{*vertexData});
+            adjacencyList.push_back(VertexNode{ *vertexData });
         }
 
         std::cout << "arc:\n";
@@ -121,11 +130,11 @@ public:
             arcNum++;
             auto [source, target] = *arcData;
             auto sourceVertex = adjacencyList.begin() + source;
-            sourceVertex->firstArc = new ArcNode{target, sourceVertex->firstArc};
+            sourceVertex->firstArc = new ArcNode{ target, sourceVertex->firstArc };
         }
 
         std::cout << "adjacency list:\n";
-        for (const auto &vertex : adjacencyList)
+        for (const auto& vertex : adjacencyList)
         {
             std::cout << vertex << std::endl;
         }
@@ -137,4 +146,22 @@ private:
     std::vector<VertexNode> adjacencyList;
     size_t vertexNum = 0;
     size_t arcNum = 0;
+
+    template <typename Visitor>
+    void depthFirstSearchHelper(const size_t parentVertexIndex, const Visitor& visit, std::vector<int8_t>& visited)
+    {
+        if (visited[parentVertexIndex])
+            return;
+
+        const auto& parentVertex = adjacencyList[parentVertexIndex];
+        visit(parentVertex.data);
+        visited[parentVertexIndex] = 1;
+
+        const auto* arc = parentVertex.firstArc;
+        while (arc)
+        {
+            depthFirstSearchHelper(arc->adjacencyVertexIndex, visit, visited);
+            arc = arc->nextArc;
+        }
+    }
 };
