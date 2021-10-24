@@ -93,7 +93,7 @@ std::vector<DataType> heapSort(std::vector<DataType> toSort)
 {
     auto begin = toSort.begin();
     auto end = toSort.end();
-    buildMaxHeap(begin, end);
+    buildMaxHeap2(begin, end);
 
     for (auto i = end - 1; i != begin; --i)
     {
@@ -122,7 +122,7 @@ void buildMaxHeap(Iter begin, Iter end)
 template <typename Iter>
 void maxHeapify(Iter begin, Iter end, Iter start)
 {
-    const auto sizeHalf = (end - begin) >> 1;
+    const size_t sizeHalf = (end - begin) / 2;
     Iter parent = start;
     while (true) {
         size_t parentIndex = parent - begin;
@@ -147,5 +147,37 @@ void maxHeapify(Iter begin, Iter end, Iter start)
 
         std::iter_swap(largest, parent);
         parent = largest;
+    }
+}
+
+// the last element is the newly inserted
+template <typename Iter>
+void maxHeapify2(Iter begin, Iter last)
+{
+    Iter changed = last;
+    while (changed != begin)
+    {
+        Iter parent = begin + (changed - begin - 1) / 2;
+        if (*changed > *parent)
+        {
+            std::iter_swap(changed, parent);
+            changed = parent;
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
+template<typename Iter>
+void buildMaxHeap2(Iter begin, Iter end)
+{
+    auto length = end - begin;
+    if (length < 2) return;
+
+    for (auto i = begin + 1; i != end; i++)
+    {
+        maxHeapify2(begin, i);
     }
 }
