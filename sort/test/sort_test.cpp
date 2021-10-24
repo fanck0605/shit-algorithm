@@ -3,7 +3,7 @@
 
 int main()
 {
-    std::vector a{ 3,2,4,1,5 };
+    std::vector a{ 16,4,10,14,1,9,3,2,8,7 };
 
     std::cout << "to sort: ";
     for (auto i : a)
@@ -28,6 +28,13 @@ int main()
     std::cout << "\nquick sort: ";
 
     for (auto i : quickSort(a))
+    {
+        std::cout << i << ' ';
+    }
+
+    std::cout << "\nheap sort: ";
+
+    for (auto i : heapSort(a))
     {
         std::cout << i << ' ';
     }

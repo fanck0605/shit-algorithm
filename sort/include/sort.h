@@ -87,3 +87,65 @@ void quickSortHelper(Iterator begin, Iterator end)
     quickSortHelper(begin, pivot);
     quickSortHelper(pivot + 1, end);
 }
+
+template <typename DataType>
+std::vector<DataType> heapSort(std::vector<DataType> toSort)
+{
+    auto begin = toSort.begin();
+    auto end = toSort.end();
+    buildMaxHeap(begin, end);
+
+    for (auto i = end - 1; i != begin; --i)
+    {
+        std::iter_swap(begin, i);
+        maxHeapify(begin, i, begin);
+    }
+
+    return toSort;
+}
+
+template<typename Iter>
+void buildMaxHeap(Iter begin, Iter end)
+{
+    auto length = end - begin;
+    if (length < 2) return;
+
+    Iter i = begin + length / 2 - 1;
+    for (;;)
+    {
+        maxHeapify(begin, end, i);
+        if (i == begin) return;
+        --i; // to be optimized
+    }
+}
+
+template <typename Iter>
+void maxHeapify(Iter begin, Iter end, Iter start)
+{
+    const auto sizeHalf = (end - begin) >> 1;
+    Iter parent = start;
+    while (true) {
+        size_t parentIndex = parent - begin;
+
+        if (parentIndex >= sizeHalf) return; // parent is a leaf
+
+        Iter largest = parent;
+
+        Iter leftChild = begin + parentIndex * 2 + 1;
+        if (*leftChild > *largest) // we must have a left child
+        {
+            largest = leftChild;
+        }
+
+        Iter rightChild = leftChild + 1;
+        if (rightChild != end && *rightChild > *largest)
+        {
+            largest = rightChild;
+        }
+
+        if (largest == parent) return;
+
+        std::iter_swap(largest, parent);
+        parent = largest;
+    }
+}
