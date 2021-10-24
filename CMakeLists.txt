@@ -13,5 +13,6 @@ add_subdirectory(rvalue_reference)
 add_subdirectory(binary_tree)
 add_subdirectory(graph)
 add_subdirectory(search)
+add_subdirectory(sort)
 
 add_executable(Main main.cpp)
