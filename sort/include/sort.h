@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 
 template <typename DataType>
 std::vector<DataType> insertSort(std::vector<DataType> toSort)
@@ -179,5 +180,58 @@ void buildMaxHeap2(Iter begin, Iter end)
     for (auto i = begin + 1; i != end; i++)
     {
         maxHeapify2(begin, i);
+    }
+}
+
+template <typename Data>
+std::vector<Data> mergeSort(std::vector<Data> toSort)
+{
+    mergeSortHelper(toSort.begin(), toSort.end());
+    return toSort;
+}
+
+template <typename Iter>
+void mergeSortHelper(Iter begin, Iter end)
+{
+    if (begin == end) return;
+    if (begin + 1 == end) return;
+
+    auto length = end - begin;
+    auto middle = begin + length / 2;
+
+    mergeSortHelper(begin, middle);
+    mergeSortHelper(middle, end);
+
+    merge(begin, middle, end);
+}
+
+template <typename Iter>
+void merge(Iter begin, Iter middle, Iter end)
+{
+
+    std::vector<typename std::iterator_traits<Iter>::value_type> temp{begin, middle};
+    
+    auto leftIter = temp.begin();
+    auto leftEnd = temp.end();
+    auto rightIter = middle;
+    auto rightEnd = end;
+
+    auto resultIter = begin;
+
+    while (leftIter < leftEnd && rightIter < rightEnd)
+    {
+        if (*leftIter < *rightIter)
+        {
+            *resultIter++ = *leftIter++;
+        }
+        else
+        {
+            *resultIter++ = *rightIter++;
+        }
+    }
+
+    if (leftIter < leftEnd)
+    {
+        std::copy(leftIter, leftEnd, resultIter);
     }
 }

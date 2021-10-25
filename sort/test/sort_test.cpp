@@ -53,6 +53,15 @@ int main()
     }
     assert(result == sorted);
 
+    std::cout << "\nmerge sort: ";
+
+    result = mergeSort(toSort);
+    for (auto i : result)
+    {
+        std::cout << i << ' ';
+    }
+    assert(result == sorted);
+
     std::cout << std::endl;
     return 0;
 }
