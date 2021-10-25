@@ -18,13 +18,13 @@ int main()
     }
 
     std::cout << "\nlongest common subsequence:\n";
-    auto result = findLcs(dp);
+    auto result = findLcs(dp, seq1, seq2);
 
     for (const auto& lcs : result)
     {
         for (const auto i : lcs)
         {
-            std::cout << seq1[i] << ' ';
+            std::cout << i << ' ';
         }
         std::cout << std::endl;
     }

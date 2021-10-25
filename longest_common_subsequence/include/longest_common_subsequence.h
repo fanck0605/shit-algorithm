@@ -4,7 +4,7 @@
 
 // longest common subsequence length
 template <typename Container>
-std::vector<std::vector<size_t>> lcsLength(Container& seq1, Container& seq2)
+std::vector<std::vector<size_t>> lcsLength(const Container& seq1, const Container& seq2)
 {
     std::vector<std::vector<size_t>> dp(seq1.size() + 1, std::vector<size_t>(seq2.size() + 1, 0));
 
@@ -27,14 +27,23 @@ std::vector<std::vector<size_t>> lcsLength(Container& seq1, Container& seq2)
 }
 
 // find longest common subsequence
-std::vector<std::vector<size_t>> findLcs(const std::vector<std::vector<size_t>>& dp) {
-    std::vector<std::vector<size_t>> result;
+template <typename Container>
+std::vector<Container> findLcs(const std::vector<std::vector<size_t>>& dp, const Container& seq1, const Container& seq2) {
+    std::vector<Container> result;
 
-    const std::function<void(size_t, size_t, std::vector<size_t>)> findLcsHelper = [&dp, &result, &findLcsHelper](size_t i, size_t j, std::vector<size_t> current) mutable
+    const std::function<void(size_t, size_t, Container)> findLcsHelper = [&](size_t i, size_t j, Container current) mutable
     {
-        if (i == 0 || j == 0)
+        if (dp[i][j] == 0)
         {
-            result.push_back({ current.rbegin(),current.rend() });
+            std::reverse(current.begin(), current.end());
+            result.push_back(std::move(current));
+            return;
+        }
+
+        if (seq1[i - 1] == seq2[j - 1])
+        {
+            current.push_back(seq1[i - 1]);
+            findLcsHelper(i - 1, j - 1, std::move(current));
             return;
         }
 
@@ -46,12 +55,6 @@ std::vector<std::vector<size_t>> findLcs(const std::vector<std::vector<size_t>>&
         if (dp[i][j - 1] == dp[i][j])
         {
             findLcsHelper(i, j - 1, current);
-        }
-
-        if (dp[i - 1][j] != dp[i][j] && dp[i][j - 1] != dp[i][j])
-        {
-            current.push_back(i - 1);
-            findLcsHelper(i - 1, j - 1, std::move(current));
         }
     };
 
