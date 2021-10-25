@@ -48,13 +48,6 @@ std::vector<DataType> bubbleSort(std::vector<DataType> toSort)
     return toSort;
 }
 
-template <typename DataType>
-std::vector<DataType> quickSort(std::vector<DataType> toSort)
-{
-    quickSortHelper(toSort.begin(), toSort.end());
-    return toSort;
-}
-
 template<typename Iterator>
 Iterator quickSortPartition(Iterator begin, Iterator end)
 {
@@ -90,34 +83,10 @@ void quickSortHelper(Iterator begin, Iterator end)
 }
 
 template <typename DataType>
-std::vector<DataType> heapSort(std::vector<DataType> toSort)
+std::vector<DataType> quickSort(std::vector<DataType> toSort)
 {
-    auto begin = toSort.begin();
-    auto end = toSort.end();
-    buildMaxHeap2(begin, end);
-
-    for (auto i = end - 1; i != begin; --i)
-    {
-        std::iter_swap(begin, i);
-        maxHeapify(begin, i, begin);
-    }
-
+    quickSortHelper(toSort.begin(), toSort.end());
     return toSort;
-}
-
-template<typename Iter>
-void buildMaxHeap(Iter begin, Iter end)
-{
-    auto length = end - begin;
-    if (length < 2) return;
-
-    Iter i = begin + length / 2 - 1;
-    for (;;)
-    {
-        maxHeapify(begin, end, i);
-        if (i == begin) return;
-        --i; // to be optimized
-    }
 }
 
 template <typename Iter>
@@ -148,6 +117,21 @@ void maxHeapify(Iter begin, Iter end, Iter start)
 
         std::iter_swap(largest, parent);
         parent = largest;
+    }
+}
+
+template<typename Iter>
+void buildMaxHeap(Iter begin, Iter end)
+{
+    auto length = end - begin;
+    if (length < 2) return;
+
+    Iter i = begin + length / 2 - 1;
+    for (;;)
+    {
+        maxHeapify(begin, end, i);
+        if (i == begin) return;
+        --i; // to be optimized
     }
 }
 
@@ -183,34 +167,28 @@ void buildMaxHeap2(Iter begin, Iter end)
     }
 }
 
-template <typename Data>
-std::vector<Data> mergeSort(std::vector<Data> toSort)
+template <typename DataType>
+std::vector<DataType> heapSort(std::vector<DataType> toSort)
 {
-    mergeSortHelper(toSort.begin(), toSort.end());
+    auto begin = toSort.begin();
+    auto end = toSort.end();
+    buildMaxHeap2(begin, end);
+
+    for (auto i = end - 1; i != begin; --i)
+    {
+        std::iter_swap(begin, i);
+        maxHeapify(begin, i, begin);
+    }
+
     return toSort;
-}
-
-template <typename Iter>
-void mergeSortHelper(Iter begin, Iter end)
-{
-    if (begin == end) return;
-    if (begin + 1 == end) return;
-
-    auto length = end - begin;
-    auto middle = begin + length / 2;
-
-    mergeSortHelper(begin, middle);
-    mergeSortHelper(middle, end);
-
-    merge(begin, middle, end);
 }
 
 template <typename Iter>
 void merge(Iter begin, Iter middle, Iter end)
 {
 
-    std::vector<typename std::iterator_traits<Iter>::value_type> temp{begin, middle};
-    
+    std::vector<typename std::iterator_traits<Iter>::value_type> temp{ begin, middle };
+
     auto leftIter = temp.begin();
     auto leftEnd = temp.end();
     auto rightIter = middle;
@@ -234,4 +212,26 @@ void merge(Iter begin, Iter middle, Iter end)
     {
         std::copy(leftIter, leftEnd, resultIter);
     }
+}
+
+template <typename Iter>
+void mergeSortHelper(Iter begin, Iter end)
+{
+    if (begin == end) return;
+    if (begin + 1 == end) return;
+
+    auto length = end - begin;
+    auto middle = begin + length / 2;
+
+    mergeSortHelper(begin, middle);
+    mergeSortHelper(middle, end);
+
+    merge(begin, middle, end);
+}
+
+template <typename Data>
+std::vector<Data> mergeSort(std::vector<Data> toSort)
+{
+    mergeSortHelper(toSort.begin(), toSort.end());
+    return toSort;
 }
