@@ -2,19 +2,20 @@
 #include <vector>
 #include <algorithm>
 
-template <typename Container>
-Container::value_type maximumSubarray(const Container& nums)
+template <typename Iter>
+std::iterator_traits<Iter>::value_type maximumSubarray(Iter begin, Iter end)
 {
-    using Data = typename Container::value_type;
+    if (begin == end) return {};
 
-    if (nums.empty())
-        return {};
+    Iter current = begin;
 
-    Data prev{};
-    Data max = nums[0];
-    for (const Data& x : nums)
+    auto prev = *current;
+    auto max = prev;
+    ++current;
+
+    for (; current != end; ++current)
     {
-        prev = std::max(prev + x, x);
+        prev = std::max(prev + *current, *current);
         max = std::max(prev, max);
     }
 
