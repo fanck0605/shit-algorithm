@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.14)
+
+add_library(MaximunSubarray INTERFACE)
+target_include_directories(MaximunSubarray INTERFACE include)
+
+add_executable(MaximunSubarrayTest test/maximum_subarray_test.cpp)
+target_link_libraries(MaximunSubarrayTest PRIVATE MaximunSubarray)
+add_test(MaximunSubarrayTest MaximunSubarrayTest)
