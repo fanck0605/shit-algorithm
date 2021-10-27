@@ -3,7 +3,7 @@
 #include <queue>
 #include <iostream>
 
-template <typename DataType>
+template <typename DataType, typename Cost = int>
 class AdjacencyMartixGraph
 {
 public:
@@ -56,7 +56,7 @@ public:
     }
 
     template <typename VertexGenerator, typename ArcGenerator>
-    void createGraph(VertexGenerator&& generateVertex, ArcGenerator&& generateArc)
+    void createGraph(VertexGenerator&& generateVertex, ArcGenerator&& generateArc, bool directed = true)
     {
         std::cout << "vertex:\n";
         for (;;)
@@ -71,7 +71,7 @@ public:
             vertexs.push_back(*vertexData);
         }
 
-        adjacencyMartix.resize(vertexNum, std::vector<int8_t>(vertexNum, 0));
+        adjacencyMartix.resize(vertexNum, std::vector<Cost>(vertexNum, 0));
 
         std::cout << "arc:\n";
         for (;;)
@@ -83,8 +83,12 @@ public:
                 break;
 
             arcNum++;
-            auto [source, target] = *arcData;
-            adjacencyMartix[source][target] = 1;
+            auto [source, target, cost] = *arcData;
+            adjacencyMartix[source][target] = cost;
+            if (!directed)
+            {
+                adjacencyMartix[target][source] = cost;
+            }
         }
 
         std::cout << "adjacency martix:\n";
@@ -101,7 +105,7 @@ public:
     }
 private:
     std::vector<DataType> vertexs;
-    std::vector<std::vector<int8_t>> adjacencyMartix;
+    std::vector<std::vector<Cost>> adjacencyMartix;
     size_t vertexNum = 0;
     size_t arcNum = 0;
 

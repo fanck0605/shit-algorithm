@@ -10,12 +10,14 @@ int main()
     AdjacencyListGraph<std::string> adjacencyListGraph;
 
     std::vector<std::string> vertexData{ "d", "a", "b", "c", "e" };
-    std::vector<std::pair<size_t, size_t>> arcData{
-        {0, 1},
-        {0, 3},
-        {1, 2},
-        {1, 3},
-        {3, 4}
+    std::vector<std::tuple<size_t, size_t, int>> arcData{
+        {0, 1, 2},
+        {0, 3, 6},
+        {1, 2, 3},
+        {1, 3, 8},
+        {1, 4, 5},
+        {2, 4, 7},
+        {3, 4, 9}
     };
 
     adjacencyListGraph.createGraph([current = vertexData.begin(), end = vertexData.end()]() mutable->std::optional<std::string>
@@ -34,8 +36,10 @@ int main()
             std::cout << "end" << std::endl;
             return std::nullopt;
         }
-        std::cout << current->first << ' ' << current->second << std::endl;
-        return *current++;
+
+        auto [source, target, cost] = *current++;
+        std::cout << source << "--" << target << ' ' << cost << std::endl;
+        return std::make_pair(source, target);
     });
 
     std::cout << "breadth first search: \n";
@@ -59,16 +63,18 @@ int main()
         }
         std::cout << *current << std::endl;
         return *current++;
-    }, [current = arcData.begin(), end = arcData.end()]() mutable->std::optional<std::pair<size_t, size_t>>
+    }, [current = arcData.begin(), end = arcData.end()]() mutable->std::optional<std::tuple<size_t, size_t, int>>
     {
         if (current == end)
         {
             std::cout << "end" << std::endl;
             return std::nullopt;
         }
-        std::cout << current->first << ' ' << current->second << std::endl;
+
+        auto [source, target, cost] = *current;
+        std::cout << source << "--" << target << ' ' << cost << std::endl;
         return *current++;
-    });
+    }, false);
 
     std::cout << "breadth first search: \n";
     adjacencyMartixGraph.breadthFirstSearch([](const std::string& data)
