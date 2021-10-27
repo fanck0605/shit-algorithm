@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cassert>
 #include "flow_shop_scheduling.h"
 
 template <typename Time>
@@ -30,6 +31,16 @@ int main()
         {6,3}
     };
 
+    std::vector<std::pair<int64_t, int64_t>> exceptedResult{
+        {3,4},
+        {6,7},
+        {8,9},
+        {9,7},
+        {6,3},
+        {4,2},
+        {5,2}
+    };
+
     std::cout << "jobs:\n";
     showJobs(jobs);
 
@@ -37,9 +48,13 @@ int main()
     auto scheduledJobs = flowShopScheduling(jobs);
     showJobs(scheduledJobs);
 
+    assert(scheduledJobs == exceptedResult);
+
     std::cout << "\ntotal time: ";
     auto time = flowShopSchedulingTime(scheduledJobs);
     std::cout << time << std::endl;
+
+    assert(time == 43);
 
     return 0;
 }
