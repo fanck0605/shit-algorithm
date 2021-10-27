@@ -17,5 +17,6 @@ add_subdirectory(sort)
 add_subdirectory(longest_common_subsequence)
 add_subdirectory(maximum_subarray)
 add_subdirectory(knapsack)
+add_subdirectory(flow_shop_scheduling)
 
 add_executable(Main main.cpp)

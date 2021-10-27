@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.14)
+
+add_library(FlowShopScheduling INTERFACE)
+target_include_directories(FlowShopScheduling INTERFACE include)
+
+add_executable(FlowShopSchedulingTest test/flow_shop_scheduling_test.cpp)
+target_link_libraries(FlowShopSchedulingTest PRIVATE FlowShopScheduling)
+add_test(FlowShopSchedulingTest FlowShopSchedulingTest)
