@@ -235,3 +235,21 @@ std::vector<Data> mergeSort(std::vector<Data> toSort)
     mergeSortHelper(toSort.begin(), toSort.end());
     return toSort;
 }
+
+
+template <typename Data>
+std::vector<Data> shellSort(std::vector<Data> toSort)
+{
+    for (size_t step = toSort.size() / 2; step > 0; step /= 2)
+    {
+        for (size_t i = step; i < toSort.size(); i++)
+        {
+            for (size_t j = i; j >= step && toSort[j] < toSort[j - step]; j -= step)
+            {
+                std::swap(toSort[j], toSort[j - step]);
+            }
+        }
+    }
+
+    return toSort;
+}

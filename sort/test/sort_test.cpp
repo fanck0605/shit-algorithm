@@ -62,6 +62,13 @@ int main()
     }
     assert(result == sorted);
 
+    std::cout << "\nshell sort: ";
+    result = shellSort(toSort);
+    for (auto i : result)
+    {
+        std::cout << i << ' ';
+    }
+
     std::cout << std::endl;
     return 0;
 }
