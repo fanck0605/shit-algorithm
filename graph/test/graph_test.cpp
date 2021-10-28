@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <optional>
+#include <tuple>
 #include "adjacency_list_graph.h"
 #include "adjacency_martix_graph.h"
 
@@ -85,6 +86,9 @@ int main()
     adjacencyMartixGraph.depthFirstSearch([](const std::string& data)
         { std::cout << data << ' '; });
     std::cout << std::endl;
+
+    std::cout << "prim minimum spanning tree:\n";
+    adjacencyMartixGraph.primMinimumSpanningTree();
 
     return 0;
 }

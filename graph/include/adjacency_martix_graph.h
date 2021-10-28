@@ -55,6 +55,53 @@ public:
         depthFirstSearchHelper(startVertexIndex, visit, visited);
     }
 
+    void primMinimumSpanningTree() {
+        std::vector<size_t> parent;
+        parent.reserve(vertexNum);
+        for (size_t i = 0; i < vertexNum; i++)
+        {
+            parent.push_back(i);
+        }
+
+        std::vector<Cost> cost(vertexNum, 0);
+        std::vector<int8_t> visited(vertexNum, 0);
+
+        size_t currentIndex = 0;
+        visited[currentIndex] = 1;
+
+        for (size_t j = 0; j < vertexNum; j++)
+        {
+            // find out closest vertex
+            for (size_t adjaceny = 0; adjaceny < vertexNum; adjaceny++)
+            {
+                const auto adjacencyCost = adjacencyMartix[currentIndex][adjaceny];
+                if (!visited[adjaceny] && adjacencyCost && (!cost[adjaceny] || adjacencyCost < cost[adjaceny]))
+                {
+                    cost[adjaceny] = adjacencyCost;
+                    parent[adjaceny] = currentIndex;
+                }
+            }
+
+            // caculate min cost and move to next vertex
+            Cost minCost = 0;
+            for (size_t i = 0; i < vertexNum; ++i)
+            {
+                if (cost[i] && (!minCost || cost[i] < minCost))
+                {
+                    minCost = cost[i];
+                    currentIndex = i;
+                }
+            }
+            visited[currentIndex] = 1;
+            cost[currentIndex] = 0;
+        }
+
+        for (size_t i = 0; i < parent.size(); i++)
+        {
+            std::cout << parent[i] << "--" << i << ' ' << adjacencyMartix[parent[i]][i] << '\n';
+        }
+    }
+
     template <typename VertexGenerator, typename ArcGenerator>
     void createGraph(VertexGenerator&& generateVertex, ArcGenerator&& generateArc, bool directed = true)
     {
