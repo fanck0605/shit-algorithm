@@ -12,5 +12,7 @@ int main()
         rbTree.insert(i);
     }
 
+    rbTree.remove(rbTree.find(1));
+
     return 0;
 }
